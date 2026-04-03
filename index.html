@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -19,39 +19,28 @@ body{
   top:20px;
   width:100%;
   text-align:center;
-  font-size:26px;
+  font-size:24px;
   color:#ff6b6b;
-}
-
-.bottom{
-  position:absolute;
-  bottom:20px;
-  width:100%;
-  text-align:center;
-  font-size:20px;
 }
 
 .msg{
   position:absolute;
-  right:5%;
-  top:25%;
-  width:250px;
-  color:#ff4da6;
+  bottom:20px;
+  width:100%;
+  text-align:center;
   font-size:16px;
-  line-height:1.6;
+  color:#ff4da6;
 }
 
 canvas{
   display:block;
 }
 </style>
-
 </head>
+
 <body>
 
-<div class="top">Pov: it's your birthday 💖🥳</div>
-<div class="bottom">l 💖</div>
-
+<div class="top">It's your birthday 💖🥳</div>
 <div class="msg" id="msg"></div>
 
 <canvas id="c"></canvas>
@@ -60,12 +49,12 @@ canvas{
 const c = document.getElementById("c");
 const ctx = c.getContext("2d");
 
-function resizeCanvas(){
+function resize(){
   c.width = window.innerWidth;
   c.height = window.innerHeight;
 }
-resizeCanvas();
-window.addEventListener("resize", resizeCanvas);
+resize();
+window.addEventListener("resize", resize);
 
 function drawHeart(){
   let cx = c.width/2;
@@ -73,22 +62,22 @@ function drawHeart(){
 
   ctx.save();
   ctx.shadowColor = "#ff4da6";
-  ctx.shadowBlur = 25;
+  ctx.shadowBlur = 20;
   ctx.fillStyle = "#ff4da6";
 
   ctx.beginPath();
 
-  for(let t=0; t<Math.PI*2; t+=0.01){
+  for(let t=0;t<Math.PI*2;t+=0.01){
     let x = 16*Math.pow(Math.sin(t),3);
     let y = 13*Math.cos(t)
-            -5*Math.cos(2*t)
-            -2*Math.cos(3*t)
-            -Math.cos(4*t);
+      -5*Math.cos(2*t)
+      -2*Math.cos(3*t)
+      -Math.cos(4*t);
 
-    let scaleFactor = Math.min(c.width, c.height) / 40;
+    let scale = Math.min(c.width,c.height)/45;
 
-    x = x * scaleFactor + cx;
-    y = -y * scaleFactor + cy;
+    x = x*scale + cx;
+    y = -y*scale + cy;
 
     ctx.lineTo(x,y);
   }
@@ -97,64 +86,32 @@ function drawHeart(){
   ctx.restore();
 }
 
-let scale = 1;
-let dir = 1;
-
 function animate(){
   ctx.clearRect(0,0,c.width,c.height);
-
-  ctx.save();
-  ctx.translate(c.width/2, c.height/2);
-  ctx.scale(scale, scale);
-  ctx.translate(-c.width/2, -c.height/2);
-
   drawHeart();
-
-  ctx.restore();
-
-  if(scale > 1.05) dir = -1;
-  if(scale < 0.95) dir = 1;
-
-  scale += dir * 0.002;
-
   requestAnimationFrame(animate);
 }
 animate();
 
+/* 💖 YOUR CUSTOM MESSAGES (FIXED) */
 const messages = [
   "Happy birthday Jyoti 💗🕊️",
   "You make everything beautiful ✨",
-  " you are special that's hard to explain 
-  you make everything beautiful 💗😊",
-  "you don't try to be anything extra, you're just you - and that's what make you so lovely 💖",
-  "Once again happy birthday to you j
-  enjoy your special day ❤️"
+  "You are special that's hard to explain, you make everything beautiful 💗😊",
+  "You don't try to be anything extra, you're just you — and that's what makes you so lovely 💖",
+  "Once again happy birthday to you, enjoy your special day ❤️"
 ];
 
-let i = 0;
+let i=0;
 
-function typeLine(){
+function show(){
   if(i < messages.length){
-    let line = document.createElement("div");
-    document.getElementById("msg").appendChild(line);
-
-    let j = 0;
-
-    function typing(){
-      if(j < messages[i].length){
-        line.innerHTML += messages[i][j];
-        j++;
-        setTimeout(typing,40);
-      } else {
-        i++;
-        setTimeout(typeLine,700);
-      }
-    }
-
-    typing();
+    document.getElementById("msg").innerHTML += messages[i] + "<br>";
+    i++;
+    setTimeout(show,1500);
   }
 }
-typeLine();
+show();
 
 </script>
 
